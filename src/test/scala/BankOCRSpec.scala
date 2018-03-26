@@ -5,7 +5,7 @@ class BankOCRSpec extends WordSpec with MustMatchers {
   "BankOCR" must {
 
     "return 1 when given two vertical pipes" in {
-      val input =List(
+      val input = List(
         "   ",
         "  |",
         "  |",
@@ -14,7 +14,7 @@ class BankOCRSpec extends WordSpec with MustMatchers {
     }
 
     "return 2 when representing 2 as pipes" in {
-      val input =List(
+      val input = List(
         " _ ",
         " _|",
         "|_ ",
@@ -23,13 +23,21 @@ class BankOCRSpec extends WordSpec with MustMatchers {
     }
 
     "return 3 when representing 3 as pipes" in {
-      val input =List(
+      val input = List(
         " _ ",
         " _|",
         " _|",
         "   ").mkString("\n")
       BankOCR.convert(input) mustEqual 3
     }
-  }
 
+    "return 12 when given 12 as pipes" in {
+      val input = List(
+        "    _ ",
+        "  | _|",
+        "  ||_ ",
+        "      ").mkString("\n")
+      BankOCR.convert(input) mustEqual 12
+    }
+  }
 }

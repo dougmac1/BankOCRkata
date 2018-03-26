@@ -1,6 +1,6 @@
 object BankOCR extends App {
 
-  def convert(x: String): Int = {
+  def convert(input: String): Int = {
 
     val numList: Map[String, Int] = Map(
       List(
@@ -54,15 +54,21 @@ object BankOCR extends App {
         "|_|",
         "   ").mkString("\n") -> 0)
 
-    numList(x)
+    val split = input.split("\n").toList
+
+    def splitToCharBy3 (row: String): List[String] = {
+      for (grid <- 0 until 6 by 3) yield {
+        val chars = row.substring(grid, grid + 3)
+        chars
+
+      }
+    }
+
+    val top = splitToCharBy3(split(0))
+    val middle = splitToCharBy3(split(1))
+    val bottom = splitToCharBy3(split(2))
+
+
 
   }
-
-  println(convert("""
-         _
-        |_|
-         _|
-        """.stripMargin))
-
-
 }
