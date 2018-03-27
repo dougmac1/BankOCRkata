@@ -1,5 +1,3 @@
-import java.util.NoSuchElementException
-
 import scala.util.{Failure, Success, Try}
 
 object BankOCR extends App {
@@ -7,59 +5,57 @@ object BankOCR extends App {
   def parseNumber(input: String): Try[String] = Try({
     val numList: Map[String, Int] = Map(
 
-      "   " +
+        "   " +
         "  |" +
         "  |" +
         "   " -> 1,
 
-      " _ " +
+        " _ " +
         " _|" +
         "|_ " +
         "   " -> 2,
 
-      " _ " +
+        " _ " +
         " _|" +
         " _|" +
         "   " -> 3,
 
-      "   " +
+        "   " +
         "|_|" +
         "  |" +
         "   " -> 4,
 
-      " _ " +
+        " _ " +
         "|_ " +
         " _|" +
         "   " -> 5,
 
-      " _ " +
+        " _ " +
         "|_ " +
         "|_|" +
         "   " -> 6,
 
-      " _ " +
+        " _ " +
         "  |" +
         "  |" +
         "   " -> 7,
 
-      " _ " +
+        " _ " +
         "|_|" +
         "|_|" +
         "   " -> 8,
 
-      " _ " +
+        " _ " +
         "|_|" +
         " _|" +
         "   " -> 9,
 
-      " _ " +
+        " _ " +
         "| |" +
         "|_|" +
         "   " -> 0)
 
     val split = input.split("\n").toList
-
-
     val numberCount = split.head.length / 3
     val top = splitToCharBy3(split(0))
     val middle = splitToCharBy3(split(1))
@@ -79,9 +75,7 @@ object BankOCR extends App {
 
   def splitToCharBy3(row: String): List[String] = {
     "(...)".r.findAllIn(row).toList
-
   }
-
 
   def checkSum(accNo: String): String = {
     if (accNo.contains("?")) {
@@ -96,9 +90,4 @@ object BankOCR extends App {
       }
     }
   }
-convert(
-  "    _ \n" +
-  "    _|\n" +
-  "  ||_ \n" +
-  "      ")
 }
