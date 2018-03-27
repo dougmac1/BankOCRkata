@@ -3,56 +3,56 @@ object BankOCR extends App {
   def convert(input: String): String = {
 
     val numList: Map[String, Int] = Map(
-      List(
-        "   ",
-        "  |",
-        "  |",
-        "   ").mkString("\n") -> 1,
-      List(
-        " _ ",
-        " _|",
-        "|_ ",
-        "   ").mkString("\n") -> 2,
-      List(
-        " _ ",
-        " _|",
-        " _|",
-        "   ").mkString("\n") -> 3,
-      List(
-        "   ",
-        "|_|",
-        "  |",
-        "   ").mkString("\n") -> 4,
-      List(
-        " _ ",
-        "|_ ",
-        " _|",
-        "   ").mkString("\n") -> 5,
-      List(
-        " _ ",
-        "|_ ",
-        "|_|",
-        "   ").mkString("\n") -> 6,
-      List(
-        " _ ",
-        "  |",
-        "  |",
-        "   ").mkString("\n") -> 7,
-      List(
-        " _ ",
-        "|_|",
-        "|_|",
-        "   ").mkString("\n") -> 8,
-      List(
-        " _ ",
-        "|_|",
-        " _|",
-        "   ").mkString("\n") -> 9,
-      List(
-        " _ ",
-        "| |",
-        "|_|",
-        "   ").mkString("\n") -> 0)
+
+        "   "+
+        "  |"+
+        "  |"+
+        "   " -> 1,
+
+        " _ "+
+        " _|"+
+        "|_ "+
+        "   " -> 2,
+
+        " _ "+
+        " _|"+
+        " _|"+
+        "   "-> 3,
+
+        "   "+
+        "|_|"+
+        "  |"+
+        "   "-> 4,
+
+        " _ "+
+        "|_ "+
+        " _|"+
+        "   " -> 5,
+
+        " _ "+
+        "|_ "+
+        "|_|"+
+        "   " -> 6,
+
+        " _ "+
+        "  |"+
+        "  |"+
+        "   " -> 7,
+
+        " _ "+
+        "|_|"+
+        "|_|"+
+        "   " -> 8,
+
+        " _ "+
+        "|_|"+
+        " _|"+
+        "   " -> 9,
+
+        " _ "+
+        "| |"+
+        "|_|"+
+        "   " -> 0)
 
     val split = input.split("\n").toList
 
@@ -62,7 +62,7 @@ object BankOCR extends App {
       val middle = splitToCharBy3(split(1))
       val bottom = splitToCharBy3(split(2))
       val output = for (eachNum <- 0 until numberCount) yield {
-        numList(top(eachNum) + "\n" + middle(eachNum) + "\n" + bottom(eachNum) + "\n" + "   ")
+        numList(top(eachNum) + middle(eachNum) + bottom(eachNum) + "   ")
       }
       output.mkString
 
