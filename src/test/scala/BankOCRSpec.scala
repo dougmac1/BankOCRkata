@@ -49,6 +49,7 @@ class BankOCRSpec extends WordSpec with MustMatchers {
 
       BankOCR.convert(input) mustEqual "000000000"
     }
+
     "return '123456789' when given 123456789 as pipes" in {
       val input =
           "    _  _     _  _  _  _  _ \n" +
@@ -57,5 +58,23 @@ class BankOCRSpec extends WordSpec with MustMatchers {
           "                           "
       BankOCR.convert(input) mustEqual "123456789"
     }
+
+    "return 'account number' if checkSum is a modulus of eleven" in {
+      BankOCR.checkSum("123456789") mustEqual "123456789"
+    }
+
+    "return 'account number + ERR' if checkSum is not a modulus of eleven" in {
+      BankOCR.checkSum("888888888") mustEqual "888888888 ERR"
+    }
+
+    "return 'account number' if checkSum 666566666 is a modulus of eleven" in {
+      BankOCR.checkSum("666566666") mustEqual "666566666"
+    }
+
+    "return 'account number + ILL' if checkSum 86110??36 is input" in {
+      BankOCR.checkSum("86110??36") mustEqual "86110??36 ILL"
+    }
+
+
   }
 }
