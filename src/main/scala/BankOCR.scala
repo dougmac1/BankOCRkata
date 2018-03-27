@@ -1,75 +1,80 @@
 import java.util.NoSuchElementException
 
+import scala.util.{Failure, Success, Try}
+
 object BankOCR extends App {
 
-  def convert(input: String): String = {
-try {
-  val numList: Map[String, Int] = Map(
+  def parseNumber(input: String): Try[String] = Try({
+    val numList: Map[String, Int] = Map(
 
       "   " +
-      "  |" +
-      "  |" +
-      "   " -> 1,
+        "  |" +
+        "  |" +
+        "   " -> 1,
 
       " _ " +
-      " _|" +
-      "|_ " +
-      "   " -> 2,
+        " _|" +
+        "|_ " +
+        "   " -> 2,
 
       " _ " +
-      " _|" +
-      " _|" +
-      "   " -> 3,
+        " _|" +
+        " _|" +
+        "   " -> 3,
 
-       "   " +
-      "|_|" +
-      "  |" +
-      "   " -> 4,
-
-      " _ " +
-      "|_ " +
-      " _|" +
-      "   " -> 5,
+      "   " +
+        "|_|" +
+        "  |" +
+        "   " -> 4,
 
       " _ " +
-      "|_ " +
-      "|_|" +
-      "   " -> 6,
+        "|_ " +
+        " _|" +
+        "   " -> 5,
 
       " _ " +
-      "  |" +
-      "  |" +
-      "   " -> 7,
-
-       " _ " +
-      "|_|" +
-      "|_|" +
-      "   " -> 8,
-
-       " _ " +
-      "|_|" +
-      " _|" +
-      "   " -> 9,
+        "|_ " +
+        "|_|" +
+        "   " -> 6,
 
       " _ " +
-      "| |" +
-      "|_|" +
-      "   " -> 0)
+        "  |" +
+        "  |" +
+        "   " -> 7,
 
-  val split = input.split("\n").toList
+      " _ " +
+        "|_|" +
+        "|_|" +
+        "   " -> 8,
+
+      " _ " +
+        "|_|" +
+        " _|" +
+        "   " -> 9,
+
+      " _ " +
+        "| |" +
+        "|_|" +
+        "   " -> 0)
+
+    val split = input.split("\n").toList
 
 
-  val numberCount = split.head.length / 3
-  val top = splitToCharBy3(split(0))
-  val middle = splitToCharBy3(split(1))
-  val bottom = splitToCharBy3(split(2))
-  val output = for (eachNum <- 0 until numberCount) yield {
-    numList(top(eachNum) + middle(eachNum) + bottom(eachNum) + "   ")
-  }
-  output.mkString
-} catch {
-  case NoSuchElementException => "?"
-}
+    val numberCount = split.head.length / 3
+    val top = splitToCharBy3(split(0))
+    val middle = splitToCharBy3(split(1))
+    val bottom = splitToCharBy3(split(2))
+    val output = for (eachNum <- 0 until numberCount) yield {
+      numList(top(eachNum) + middle(eachNum) + bottom(eachNum) + "   ")
+    }
+    output.mkString
+  })
+
+  def convert(input: String): String = {
+    parseNumber(input) match {
+      case Success(x) => x
+      case Failure(e) => "?"
+    }
   }
 
   def splitToCharBy3(row: String): List[String] = {
