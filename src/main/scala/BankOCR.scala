@@ -90,4 +90,12 @@ object BankOCR extends App {
       }
     }
   }
+
+  def fixScanErrors(input : String) : String = {
+    if (input.length == 9) {
+      input
+    } else {
+
+    }
+  }
 }
