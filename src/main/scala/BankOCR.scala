@@ -1,4 +1,28 @@
+import java.io.{BufferedWriter, File, FileWriter}
 import scala.util.Try
+import scala.io.Source
+
+object ReadFile {
+  def read(name : String) = {
+    val buffer = Source.fromFile(s"/home/digital030585/TrainingFiles/BankOCRkata/src/main/scala/$name")
+    val fileContents = buffer.getLines().map(line =>
+      line + "\n"
+    ).mkString
+    buffer.close()
+    fileContents
+  }
+}
+
+object WriteFile {
+
+  def write(text: String) : File = {
+    val file = new File("/home/digital030585/TrainingFiles/BankOCRkata/src/main/scala/Account Output.txt")
+    val bufferedWriter = new BufferedWriter(new FileWriter(file))
+    bufferedWriter.write(text)
+    bufferedWriter.close()
+    file
+  }
+}
 
 object BankOCR extends App {
 
@@ -93,14 +117,5 @@ object BankOCR extends App {
       }
     }
   }
-
-  println(convert(
-        "    _  _     _  _  _  _  _ \n" +
-        "  | _| _||_||_ |_   ||_||_|\n" +
-        "  ||_  _|  | _||_|  ||_| _|\n" +
-        "                           \n" +
-        " _  _  _  _  _  _  _  _  _ \n" +
-        "| || || || |  || || || || |\n" +
-        "|_||_||_||_|  ||_||_||_||_|\n" +
-        "                           "))
+  WriteFile.write(convert(ReadFile.read("Bank Account Numbers.txt")))
 }
