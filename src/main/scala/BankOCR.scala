@@ -1,8 +1,31 @@
-import scala.util.{Failure, Success, Try}
+import scala.util.Try
 
 object BankOCR extends App {
 
-  def parseNumber(input: String): Try[String] = Try({
+  def parseAccounts(input: String): List[String] = {
+    "(.+\n?){4}".r.findAllIn(input).toList
+  }
+
+  def parseDigits(input: String): List[String] = {
+    val split = input.split("\n").toList
+    val numberCount = split.head.length / 3
+    val top = "(...)".r.findAllIn(split.head).toList
+    val middle = "(...)".r.findAllIn(split(1)).toList
+    val bottom = "(...)".r.findAllIn(split(2)).toList
+
+    for (eachNum <- (0 until numberCount).toList) yield {
+      top(eachNum) + middle(eachNum) + bottom(eachNum) + "   "
+    }
+  }
+
+  def convert(input: String): String = {
+    val parsedAccs = parseAccounts(input)
+    val parsed = parsedAccs.map(x => parseDigits(x))
+    val converted = parsed.map(x => convertToNumber(x))
+    converted.map(x => checkSum(x)).mkString("\n")
+  }
+
+  def convertToNumber(listOfDigits: List[String]): String = {
     val numList: Map[String, Int] = Map(
 
         "   " +
@@ -54,27 +77,7 @@ object BankOCR extends App {
         "| |" +
         "|_|" +
         "   " -> 0)
-
-    val split = input.split("\n").toList
-    val numberCount = split.head.length / 3
-    val top = splitToCharBy3(split(0))
-    val middle = splitToCharBy3(split(1))
-    val bottom = splitToCharBy3(split(2))
-    val output = for (eachNum <- 0 until numberCount) yield {
-      numList(top(eachNum) + middle(eachNum) + bottom(eachNum) + "   ")
-    }
-    output.mkString
-  })
-
-  def convert(input: String): String = {
-    parseNumber(input) match {
-      case Success(x) => x
-      case Failure(e) => "?"
-    }
-  }
-
-  def splitToCharBy3(row: String): List[String] = {
-    "(...)".r.findAllIn(row).toList
+    listOfDigits.map(digit => Try(numList(digit)) getOrElse "?").mkString
   }
 
   def checkSum(accNo: String): String = {
@@ -91,11 +94,13 @@ object BankOCR extends App {
     }
   }
 
-  def fixScanErrors(input : String) : String = {
-    if (input.length == 9) {
-      input
-    } else {
-
-    }
-  }
+  println(convert(
+        "    _  _     _  _  _  _  _ \n" +
+        "  | _| _||_||_ |_   ||_||_|\n" +
+        "  ||_  _|  | _||_|  ||_| _|\n" +
+        "                           \n" +
+        " _  _  _  _  _  _  _  _  _ \n" +
+        "| || || || |  || || || || |\n" +
+        "|_||_||_||_|  ||_||_||_||_|\n" +
+        "                           "))
 }

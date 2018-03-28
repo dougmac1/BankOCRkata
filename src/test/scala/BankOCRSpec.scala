@@ -10,7 +10,7 @@ class BankOCRSpec extends WordSpec with MustMatchers {
         "  |\n" +
         "  |\n" +
         "   "
-      BankOCR.convert(input) mustEqual "1"
+      BankOCR.convert(input) mustEqual "1 ERR"
     }
 
     "return 2 when representing 2 as pipes" in {
@@ -19,7 +19,7 @@ class BankOCRSpec extends WordSpec with MustMatchers {
         " _|\n" +
         "|_ \n" +
         "   "
-      BankOCR.convert(input) mustEqual "2"
+      BankOCR.convert(input) mustEqual "2 ERR"
     }
 
     "return 3 when representing 3 as pipes" in {
@@ -28,7 +28,7 @@ class BankOCRSpec extends WordSpec with MustMatchers {
         " _|\n" +
         " _|\n" +
         "   "
-      BankOCR.convert(input) mustEqual "3"
+      BankOCR.convert(input) mustEqual "3 ERR"
     }
 
     "return 12 when given 12 as pipes" in {
@@ -37,7 +37,7 @@ class BankOCRSpec extends WordSpec with MustMatchers {
         "  | _|\n" +
         "  ||_ \n" +
         "      "
-      BankOCR.convert(input) mustEqual "12"
+      BankOCR.convert(input) mustEqual "12 ERR"
     }
 
     "return 000000000 when given nine 0's as pipes" in {
@@ -59,6 +59,15 @@ class BankOCRSpec extends WordSpec with MustMatchers {
       BankOCR.convert(input) mustEqual "123456789"
     }
 
+    "return '1234?6789' when given 1234?6789 as pipes" in {
+      val input =
+          "    _  _     _  _  _  _  _ \n" +
+          "  | _| _||_| _ |_   ||_||_|\n" +
+          "  ||_  _|  | _||_|  ||_| _|\n" +
+          "                           "
+      BankOCR.convert(input) mustEqual "1234?6789 ILL"
+    }
+
     "return 'account number' if checkSum is a modulus of eleven" in {
       BankOCR.checkSum("123456789") mustEqual "123456789"
     }
@@ -75,6 +84,19 @@ class BankOCRSpec extends WordSpec with MustMatchers {
       BankOCR.checkSum("86110??36") mustEqual "86110??36 ILL"
     }
 
+    "return '123456789' and '000070000 ERR' when given 123456789 as pipes in the 1st entry and 000070000 as pipes in 2nd entry" in {
+      val input =
+          "    _  _     _  _  _  _  _ \n" +
+          "  | _| _||_||_ |_   ||_||_|\n" +
+          "  ||_  _|  | _||_|  ||_| _|\n" +
+          "                           \n" +
+          " _  _  _  _  _  _  _  _  _ \n" +
+          "| || || || |  || || || || |\n" +
+          "|_||_||_||_|  ||_||_||_||_|\n" +
+          "                           "
+      BankOCR.convert(input) mustEqual  "123456789\n" +
+                                        "000070000 ERR"
+    }
 
   }
 }
