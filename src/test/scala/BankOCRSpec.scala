@@ -1,5 +1,6 @@
 import org.scalatest.{MustMatchers, WordSpec}
 
+
 class BankOCRSpec extends WordSpec with MustMatchers {
 
   "BankOCR" must {
