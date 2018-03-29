@@ -1,6 +1,5 @@
 import org.scalatest.{MustMatchers, WordSpec}
 
-
 class BankOCRSpec extends WordSpec with MustMatchers {
 
   "BankOCR" must {
@@ -60,13 +59,13 @@ class BankOCRSpec extends WordSpec with MustMatchers {
       BankOCR.convert(input) mustEqual "123456789"
     }
 
-    "return '1234?6789' when given 1234?6789 as pipes" in {
+    "return '1234?6789' when given 123456789 as pipes" in {
       val input =
           "    _  _     _  _  _  _  _ \n" +
           "  | _| _||_| _ |_   ||_||_|\n" +
           "  ||_  _|  | _||_|  ||_| _|\n" +
           "                           "
-      BankOCR.convert(input) mustEqual "1234?6789 ILL"
+      BankOCR.convert(input) mustEqual "123456789"
     }
 
     "return 'account number' if checkSum is a modulus of eleven" in {
@@ -85,7 +84,7 @@ class BankOCRSpec extends WordSpec with MustMatchers {
       BankOCR.checkSum("86110??36") mustEqual "86110??36 ILL"
     }
 
-    "return '123456789' and '000070000 ERR' when given 123456789 as pipes in the 1st entry and 000070000 as pipes in 2nd entry" in {
+    "return '123456789' and '080070000' when given 123456789 as pipes in the 1st entry and 000070000 as pipes in 2nd entry" in {
       val input =
           "    _  _     _  _  _  _  _ \n" +
           "  | _| _||_||_ |_   ||_||_|\n" +
@@ -96,7 +95,25 @@ class BankOCRSpec extends WordSpec with MustMatchers {
           "|_||_||_||_|  ||_||_||_||_|\n" +
           "                           "
       BankOCR.convert(input) mustEqual  "123456789\n" +
-                                        "000070000 ERR"
+                                        "080070000"
+    }
+
+    "return '490067715 AMB ['490067115', '490067719', '490867715']' when given 490067715 as pipes" in {
+      val input =
+          "    _  _  _  _  _  _     _ \n" +
+          "|_||_|| || ||_   |  |  ||_ \n" +
+          "  | _||_||_||_|  |  |  | _|\n" +
+          "                           "
+      BankOCR.convert(input) mustEqual "490067715 AMB ['490067115', '490067719', '490867715']"
+    }
+
+    "return '666666666 AMB ['666566666', '686666666']' when given 666666666 as pipes" in {
+      val input =
+          " _  _  _  _  _  _  _  _  _ \n" +
+          "|_ |_ |_ |_ |_ |_ |_ |_ |_ \n" +
+          "|_||_||_||_||_||_||_||_||_|\n" +
+          "                           "
+      BankOCR.convert(input) mustEqual "666666666 AMB ['666566666', '686666666']"
     }
 
   }
