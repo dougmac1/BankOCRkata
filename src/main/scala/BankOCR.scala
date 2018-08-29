@@ -24,7 +24,7 @@ class WriteFile {
   }
 }
 
-object BankOCR extends App {
+object BankOCRTest extends App {
 
   val readFile = new ReadFile
   val writeFile = new WriteFile
